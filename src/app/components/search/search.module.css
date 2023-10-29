@@ -1,0 +1,12 @@
+.searchInput:focus {
+  border-color: #00684A;
+}
+
+.queryItem {
+  border-left-color: #00684A;
+  border-right-color: #00684A;
+}
+
+.queryItem:last-child {
+  border-bottom-color: #00684A;
+}
