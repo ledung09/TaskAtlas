@@ -1,12 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import styles from "./filter.module.css"
-import * as Realm from "realm-web";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Stack from 'react-bootstrap/Stack';
+import { mongoObject } from "@/app/interface/interface";
 
+import { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
 import Accordion from 'react-bootstrap/Accordion';
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import Card from 'react-bootstrap/Card';
@@ -14,7 +11,7 @@ import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { HiOutlineTrash, HiDocumentAdd, HiCheckCircle, HiXCircle, HiOutlinePencilAlt, HiExclamationCircle } from "react-icons/hi";
+import { HiOutlineTrash, HiCheckCircle, HiXCircle, HiOutlinePencilAlt, HiExclamationCircle } from "react-icons/hi";
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -43,14 +40,6 @@ function coverDate(inputDate: string): string {
   return `${day}/${month}/${year}`;
 }
 
-interface mongoObject {
-  _id: any;
-  name: string;
-  due: any;
-  priority: number;
-  description: string;
-}
-
 interface Props {
   key: number;
   id: string;
@@ -60,10 +49,14 @@ interface Props {
   _des: string;
   tasks: mongoObject[];
   setTasks: any;
+  setInput: any;
+  setFilterPr: any;
+  setFilterDate: any;
+  setSort: any;
 }
 
 export default function Task(props: Props) {
-  const { id, _name, _due, _prior, _des, tasks, setTasks } = props;
+  const { id, _name, _due, _prior, _des, tasks, setTasks, setInput, setFilterDate, setFilterPr, setSort } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -80,6 +73,11 @@ export default function Task(props: Props) {
     setDes(_des)
   }, [_name, _due, _prior, _des])
 
+  const resetAll = () => {
+    setFilterPr([]);
+    setFilterDate("");
+    setSort([0, 0]);
+  };
 
   return (
     <>
@@ -136,7 +134,9 @@ export default function Task(props: Props) {
                       body: JSON.stringify({ id })
                     });
                     const { tasks } = await response.json();
-                    setTasks(tasks)
+                    setTasks(tasks);
+                    setInput("")
+                    resetAll();
                   }
                 }}
                 />
@@ -291,6 +291,8 @@ export default function Task(props: Props) {
             });
             const { tasks } = await response.json();
             setTasks(tasks)
+            setInput("")
+            resetAll();
             handleClose();
           }}
         >

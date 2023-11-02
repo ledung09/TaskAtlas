@@ -1,32 +1,11 @@
 "use client";
 
 import styles from "./search.module.css";
-import { useEffect, useState } from "react";
-import * as Realm from "realm-web";
-import Container from "react-bootstrap/Container";
+import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Stack from "react-bootstrap/Stack";
-
-import Accordion from "react-bootstrap/Accordion";
-import { useAccordionButton } from "react-bootstrap/AccordionButton";
-import Card from "react-bootstrap/Card";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import { HiTrash } from "react-icons/hi";
-import Modal from "react-bootstrap/Modal";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ListGroup from 'react-bootstrap/ListGroup';
 
-interface mongoObject {
-  _id: any;
-  name: string;
-  due: any;
-  priority: number;
-  description: string;
-}
+import { mongoObject } from "@/app/interface/interface";
 
 interface QueryRes {
   _id: any;
@@ -60,10 +39,6 @@ export default function Search(props: Props) {
         className={styles.searchInput}
         onFocus={()=>setShowQueryRes(true)}
         onBlur={()=>setShowQueryRes(false)}
-          
-        onClick={(e) => {
-          console.log(e)
-        }}
         style={{
           width: "100%",
           boxShadow: "none",
@@ -84,11 +59,15 @@ export default function Search(props: Props) {
             setTasks(tasks)
           } else {
             setQueryRes([]);
-            const response = await fetch(`/api/filter?` + sortQuer);
-            const { tasks } = await response.json();
-            console.log(tasks)
-            setTasks(tasks)
-            console.log("dangitg")
+            if (sortQuer === "") {
+              const response = await fetch(`/api`);
+              const { tasks } = await response.json();
+              setTasks(tasks)
+            } else {
+              const response = await fetch(`/api/filter?` + sortQuer);
+              const { tasks } = await response.json();
+              setTasks(tasks)
+            }
           }
         }}
       />

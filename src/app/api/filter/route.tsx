@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import * as Realm from "realm-web";
 
 export const GET = async (req: Request) => {
@@ -6,12 +6,8 @@ export const GET = async (req: Request) => {
   const prior = searchParams.getAll("prior").map((str) => parseInt(str, 10));
   const due = searchParams.get("due");
   const sort = searchParams.getAll("sort").map((str) => parseInt(str, 10));
-
   const pr = prior.length > 0 ? prior : [];
   const du = due !== null ? due : "";
-
-
-
   const REALM_APP_ID: string = process.env.NEXT_PUBLIC_REALM_APP_ID!;
   const app = new Realm.App({ id: REALM_APP_ID });
   const credentials = Realm.Credentials.anonymous();

@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import * as Realm from "realm-web";
 
 export const GET = async (req: Request) => {
@@ -17,6 +17,4 @@ export const GET = async (req: Request) => {
     console.error("Failed to log in", err);
     return NextResponse.json({ error: "Failed to search tasks" }, { status: 500 });
   }
-  return NextResponse.json({ tasks: id }, { status: 200 });
-
 };

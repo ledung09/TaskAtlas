@@ -1,41 +1,24 @@
 "use client"
 
 import { useState } from "react";
-import styles from "./filter.module.css"
-import * as Realm from "realm-web";
-import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import Stack from 'react-bootstrap/Stack';
-
-import Accordion from 'react-bootstrap/Accordion';
-import { useAccordionButton } from 'react-bootstrap/AccordionButton';
-import Card from 'react-bootstrap/Card';
-import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
-import { HiTrash, HiOutlineDocumentAdd, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { HiOutlineDocumentAdd, HiCheckCircle, HiXCircle } from "react-icons/hi";
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
-import { GrPowerCycle, GrAdd, GrSort } from "react-icons/gr";
-
-interface mongoObject {
-  _id: any;
-  name: string;
-  due: any;
-  priority: number;
-  description: string;
-}
+import { mongoObject } from "@/app/interface/interface";
 
 interface Props {
   tasks: mongoObject[];
   setTasks: any;
+  setFilterPr: any;
+  setFilterDate: any;
+  setSort: any;
 }
 
 export default function Add(props: Props) {
-  const { tasks, setTasks } = props;
+  const { tasks, setTasks, setFilterPr, setFilterDate, setSort } = props;
   const [name, setName] = useState<string>("")
   const [due, setDue] = useState<string>("")
   const [prior, setPrior] = useState<number>(3)
@@ -43,10 +26,15 @@ export default function Add(props: Props) {
 
 
   const [validName, setValidName] = useState<boolean>(true)
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const resetAll = () => {
+    setFilterPr([]);
+    setFilterDate("");
+    setSort([0, 0]);
+  };
 
   return (
     <>
@@ -191,8 +179,8 @@ export default function Add(props: Props) {
               });
               const { tasks } = await response.json();
               setTasks(tasks)
-              // console.log(tasks)
               handleClose();
+              resetAll();
             }}
           >
             Add

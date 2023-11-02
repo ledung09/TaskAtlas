@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import * as Realm from "realm-web";
 
 export const GET = async () => {
@@ -15,7 +15,6 @@ export const GET = async () => {
   }
 };
 
-
 export const POST = async (req: Request) => {
   const body = await req.json()
   const { name , due , prior, des } = body
@@ -31,7 +30,6 @@ export const POST = async (req: Request) => {
     console.error("Failed to log in", err);
     return NextResponse.json({ error: "Failed to insert task" }, { status: 500 });
   }
-  return NextResponse.json({ tasks: due }, { status: 200 });
 }
 
 export const PUT = async (req: Request) => {
@@ -49,7 +47,6 @@ export const PUT = async (req: Request) => {
     console.error("Failed to log in", err);
     return NextResponse.json({ error: "Failed to insert task" }, { status: 500 });
   }
-  return NextResponse.json({ tasks: id }, { status: 200 });
 }
 
 
@@ -68,6 +65,5 @@ export const DELETE = async (req: Request) => {
     console.error("Failed to log in", err);
     return NextResponse.json({ error: "Failed to insert task" }, { status: 500 });
   } 
-  return NextResponse.json({ tasks: id }, { status: 200 });
 }
 

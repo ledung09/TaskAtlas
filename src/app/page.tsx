@@ -1,31 +1,19 @@
 "use client";
 
 import Image from "next/image";
-
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
-import * as Realm from "realm-web";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Stack from "react-bootstrap/Stack";
-
-import Accordion from "react-bootstrap/Accordion";
-import { useAccordionButton } from "react-bootstrap/AccordionButton";
-import Card from "react-bootstrap/Card";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import { HiTrash } from "react-icons/hi";
-import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { GrPowerCycle, GrAdd, GrSort } from "react-icons/gr";
 import Filter from "./components/filter/Filter";
 import Add from "./components/add/Add";
 import Task from "./components/task/Task";
 import Search from "./components/search/Search";
+import AppInfo from "./components/appInfo/AppInfo"
 
 interface mongoObject {
   _id: any;
@@ -55,81 +43,13 @@ export default function Home() {
     getAll();
   }, []);
 
-  // useEffect(() => {
-  //   const getFilter = async () => {
-  //     const response = await fetch("/api/filter?due=14/10/2023&sort=-1&sort=1");
-  //     const { tasks } = await response.json();
-  //     console.log(tasks);
-  //   };
-  //   getFilter();
-  // }, []);
-
-
-  //   useEffect(() => {
-  //   const getAll = async () => {
-  //     const response = await fetch('/api', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         name: 'value',
-  //         due: 'anotherValue',
-  //         prior: 'anotherValue',
-  //         des: 'anotherValue'
-  //       })
-  //     });
-  //     const { tasks } = await response.json();
-  //     console.log(tasks)
-  //     // setTasks([])
-  //   };
-  //   getAll();
-  // }, []);
-
-  // useEffect(() => {
-  //   const tasks = async () => {
-  //     const REALM_APP_ID: string = process.env.NEXT_PUBLIC_REALM_APP_ID!;
-  //     const app = new Realm.App({ id: REALM_APP_ID });
-  //     const credentials = Realm.Credentials.anonymous();
-  //     try {
-  //       const user = await app.logIn(credentials);
-  //       const getTasks = await user.functions.getTasks();
-  //       setTasks(getTasks);
-  //     } catch (err) {
-  //       console.error("Failed to log in", err);
-  //     }
-  //   };
-  //   tasks();
-  // }, []);
-
-  console.log(tasks);
   return (
     <main className={styles.main}>
       <Container
         className={styles.container}
         style={{ backgroundColor: "white" }}
       >
-        <div className={styles.appNameLogo}>
-          <Image 
-            src={"/logo.png"}
-            width={0}
-            height={0}
-            style={{
-              width: "auto",
-              height: "100px",
-              objectFit: "contain",
-            }}
-            priority={true}
-            alt={"TaskAlas logo"}
-          />
-
-          <h1 
-            className={styles.appName}
-          >
-            TASKATLAS
-          </h1>
-
-        </div>
+        <AppInfo />
         <Stack direction="horizontal" gap={2}>
           <Search
             tasks={tasks}
@@ -140,7 +60,6 @@ export default function Home() {
             sortQuer={sortQuer}
           />
           <div className="vr" />
-
           <Filter
             filterPr={filterPr}
             filterDate={filterDate}
@@ -156,19 +75,19 @@ export default function Home() {
           <Add 
             tasks={tasks}
             setTasks={setTasks}
+            setFilterPr={setFilterPr}
+            setFilterDate={setFilterDate}
+            setSort={setSort}
           />
         </Stack>
-        <Form.Check // prettier-ignore
+        <Form.Check 
           type="switch"
           id="custom-switch"
           label="Search suggestion"
           className="w-100 d-flex justify-content-end gap-2 mb-0"
           style={{ marginTop: "16px"}}
-          onChange={(e)=> {
-            setAutoComplete(e.target.checked)
-          }}
+          onChange={(e)=> setAutoComplete(e.target.checked)}
         />
-
         <hr style={{ marginTop: "12px"}} />
         <Row className="px-3">
           <Col md={6}>
@@ -183,7 +102,6 @@ export default function Home() {
           <Col md={2}>
             <p className="text-center mb-2">Action</p>
           </Col>
-
         </Row>
         {tasks.map((task: mongoObject, idx: number) => {
           return (
@@ -196,6 +114,10 @@ export default function Home() {
               _des={task.description}
               tasks={tasks}
               setTasks={setTasks}
+              setInput={setInput}
+              setFilterPr={setFilterPr}
+              setFilterDate={setFilterDate}
+              setSort={setSort}
             />
           );
         })}

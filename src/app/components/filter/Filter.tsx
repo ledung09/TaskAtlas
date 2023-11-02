@@ -1,25 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./filter.module.css";
-import * as Realm from "realm-web";
-import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import Stack from "react-bootstrap/Stack";
-
-import Accordion from "react-bootstrap/Accordion";
-import { useAccordionButton } from "react-bootstrap/AccordionButton";
-import Card from "react-bootstrap/Card";
-import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import { HiTrash, HiOutlineFilter } from "react-icons/hi";
+import { HiOutlineFilter } from "react-icons/hi";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
-import { GrPowerCycle, GrAdd, GrSort } from "react-icons/gr";
 
 interface Props {
   filterPr: number[];
@@ -83,6 +70,7 @@ export default function Filter(props: Props) {
     setFilterPr([]);
     setFilterDates("");
     setSort([0, 0]);
+    setSortQuer("")
   };
 
   return (
@@ -108,12 +96,6 @@ export default function Filter(props: Props) {
         <Modal.Body>
           <Row>
             <Col style={{ borderRight: "1px solid #dee2e6" }}>
-              
-              
-              
-              
-              
-    
               <h5 className="pb-1">Due date</h5>
               <Form.Group controlId="duedate">
                 <Form.Control
@@ -138,13 +120,9 @@ export default function Filter(props: Props) {
               >
                 Clear this choice
               </Button>
-
-
             </Col>
             <Col>
-
-
-            <h5 className="pb-1">Priority</h5>
+              <h5 className="pb-1">Priority</h5>
               <Form>
                 <Form.Check
                   type="checkbox"
@@ -179,9 +157,6 @@ export default function Filter(props: Props) {
               >
                 Clear this choice
               </Button>
-
-              
-
             </Col>
           </Row>
           <hr />
@@ -193,7 +168,7 @@ export default function Filter(props: Props) {
           </h4>
           <Row>
             <Col style={{ borderRight: "1px solid #dee2e6" }}>
-            <Form className="d-flex align-items-center mt-1">
+              <Form className="d-flex align-items-center mt-1">
                 <Form.Check
                   inline
                   type="checkbox"
@@ -256,8 +231,7 @@ export default function Filter(props: Props) {
                   checked={sort[0] === -1}
                   onClick={(e) => modifySort(e, 1, 0, -1)}
                 />
-              </Form>
-              
+              </Form>   
             </Col>
           </Row>
         </Modal.Body>
@@ -311,19 +285,14 @@ export default function Filter(props: Props) {
                 const sortStr = sort.map((value) => `sort=${value}`).join("&");
                 query += sortStr === "" ? "" : `&${sortStr}`;
                 setSortQuer(query)
-                console.log(query);
                 handleClose();
-                console.log("xxx")
-
                 if (input.length === 0) {
                   const response = await fetch("/api/filter?" + query);
                   const { tasks } = await response.json();
                   setTasks(tasks);
-                  console.log("dang")
                 } else {
                   const response = await fetch(`/api/search?query=${input}&` + query);
                   const { tasks } = await response.json();
-                  console.log(`/api/search?query=${input}&` + query)
                   setTasks(tasks);
                 }
               }
